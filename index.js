@@ -2,10 +2,13 @@ const root = document.getElementById('root');
 
 fetch('./students.json')
     .then(response => response.json())
+    // .then(response => localStorage.setItem('students', JSON.stringify(response)))
+    // .then(response => displayStudent(localStorage.getItem('students')))
     .then(response => displayStudent(response))
     .catch(err => alert(err))
-
+// console.log(localStorage.students)
 function displayStudent(students) {
+    console.log(students)
     students.forEach(student => {
         let parents = [];
         Object.keys(student).forEach(key => {
@@ -18,8 +21,14 @@ function displayStudent(students) {
 }
 
 function renderSingleStudent(student, parents) {
-    return `<details class="student"><summary>${student.name}</summary><p>Email: ${student.email}</p><p>Section: ${student.section}</p><p>Grade: ${student.grade}</p><h3>${parents.length ? 'Parents' : 'No parents registered'}</h3>${parents}</details>`
+    if(localStorage.getItem(student.name)!=null){
+        student.nameEdit = localStorage[student.name]
+        return `<details class="student"><summary id="${student.name}" contenteditable="true" onload="checkEdits('${student.name}')"  onclick="saveEdits('${student.name}')">${student.nameEdit}</summary>${parents}</details>`
+    } else{
+        return `<details class="student"><summary id="${student.name}" contenteditable="true" onload="checkEdits('${student.name}')"  onclick="saveEdits('${student.name}')">${student.name}</summary>${parents}</details>`
+    }
 }
+
 
 function displayParent(parents){
     let results = [];
@@ -36,5 +45,26 @@ function displayParent(parents){
 }
 
 function renderSingleParent(parent) {
-    return `<details class="parent"><summary>${parent.name}</summary><p>Email: ${parent.email}</p><p>Phone: ${parent.phone}</p></details>`
+    if(localStorage.getItem(parent.name)!=null){
+        parent.nameEdit = localStorage[parent.name]
+        return `<details class="parent"><summary id="${parent.name}" contenteditable="true" onload="checkEdits('${parent.name}')"  onclick="saveEdits('${parent.name}')">${parent.nameEdit}</summary></details>`
+    } else{
+        return `<details class="parent"><summary id="${parent.name}" contenteditable="true" onload="checkEdits('${parent.name}')"  onclick="saveEdits('${parent.name}')">${parent.name}</summary></details>`
+    }
+}
+
+
+function saveEdits(person) {
+    document.getElementById(person).addEventListener("input", function() {
+        let updateName = document.getElementById(person).innerText
+        localStorage.setItem(person, updateName )
+    }, false);
+}
+
+
+function checkEdits(person) {
+    // console.log('checkEdit', person)
+	if(localStorage.getItem(person.name)!=null){
+			document.getElementById(person).innerHTML = localStorage[person];
+	}
 }
