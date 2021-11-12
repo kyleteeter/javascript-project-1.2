@@ -6,8 +6,8 @@ fetch('./students.json')
     // .then(response => displayStudent(localStorage.getItem('students')))
     .then(response => displayStudent(response))
     .catch(err => alert(err))
-// console.log(localStorage.students)
-function displayStudent(students) {
+
+    function displayStudent(students) {
     console.log(students)
     students.forEach(student => {
         let parents = [];

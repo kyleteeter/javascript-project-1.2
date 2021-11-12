@@ -30,8 +30,7 @@ details{
 
 details[open] {
     z-index:99;
-    min-height:100px;
-    grid-row: span 6;
+    grid-row: span 2;
     box-shadow: none;
 }
 
